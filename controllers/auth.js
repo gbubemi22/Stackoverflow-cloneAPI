@@ -13,18 +13,12 @@ const register = async (req, res) => {
    if (emailAlreadyExists) {
      throw new CustomError.BadRequestError('Email already exists');
    }
-
-   const phoneNumberAlreadyExists = await User.findOne({ phonenumber });
-  if (phoneNumberAlreadyExists) {
-    throw new CustomError.BadRequestError('phonenumber already exists');
-  }
-
+    
   const isFirstAccount = (await User.countDocuments({})) === 0;
     const role = isFirstAccount ?'admin' : 'user';
 
-
-
-    const user = await User.create({ fullname, username, email, phonenumber, password , role });
+  
+    const user = await User.create({  name, email, password , role });
 
   const tokenUser = createTokenUser(user);
   attachCookiesToResponse({ res, user: tokenUser });
@@ -35,9 +29,9 @@ const register = async (req, res) => {
 
 
 const login = async (req, res) => {
-    const { username, password } = req.body;
+    const { name, password } = req.body;
   
-    if (!username || !password) {
+    if (!name || !password) {
       throw new CustomError.BadRequestError('Please provide username and password');
     }
   
@@ -59,9 +53,12 @@ const login = async (req, res) => {
   
   
   const logout = async (req, res) => {
+
+    const {NODE_ENV} = process.env;
     res.cookie('token', 'logout', {
       httpOnly: true,
       expires: new Date(Date.now() + 1000),
+      secure: NODE_ENV === "develpoment" ? false : true,
     });
     res.status(StatusCodes.OK).json({ msg: 'user logged out!' });
   };

@@ -16,13 +16,13 @@ const {
 
   const {
     authenticateUser,
-    authorizePermissions,
-  } = require('../middleware/authentication');
+    authorizePermissions
+    } = require('../middleware/authentication');
 
   router.post('/register', register);
   router.post('/login', login);
   router.get('logout', logout);
-  router.get('/profile',userProfile);
+  router.get('/profile',(authenticateUser),userProfile);
 
   router.put('/userUpdate', updateUser)
 
@@ -30,7 +30,7 @@ const {
   router.patch('/resetpassword', resetPassword)
 
 
-  router.post('/upload', [profileImageUpload.single("profile_image")],imageUpload)
+  router.post('/upload', [profileImageUpload.single("profile_image")],(authenticateUser),imageUpload)
 
 
 module.exports = router;

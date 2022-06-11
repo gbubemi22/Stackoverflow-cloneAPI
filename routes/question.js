@@ -11,25 +11,27 @@ const { AskQuestion,
 
      } = require('../controllers/question');
 
-
+const {
+          authenticateUser,
+          } = require('../middleware/authentication');
 
 
 router.route('/')
-.post(AskQuestion)
+.post(AskQuestion,(authenticateUser))
 .get(getAllQuestions)
 
 
 
 router.route('/:id')
 .get(getSingleQuestion)
-.patch(updateQustion)
-.delete(deleteQuestion)
+.patch(updateQustion, (authenticateUser))
+.delete(deleteQuestion, (authenticateUser))
 
 router.route('/:id/like')
-.get(likeQuestion)
+.get(likeQuestion, (authenticateUser))
 
 
 router.route('/:id/unlike')
-.get(undoLikeQuestion)
+.get(undoLikeQuestion, (authenticateUser))
 
 module.exports = router;
