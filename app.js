@@ -9,6 +9,7 @@ const app = express();
 const morgan = require('morgan');
 const  bodyParser = require('body-parser');
 const mongoSanitize = require('express-mongo-sanitize');
+const path = require('path');
 const routers = require('./routes/index');
 
 
@@ -25,6 +26,7 @@ app.use('/api/v1/', routers);
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public"))); // Static files.
 
 
 app.use(mongoSanitize());

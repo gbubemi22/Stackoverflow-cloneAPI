@@ -1,20 +1,21 @@
 const Qestion = require('../models/Question');
 const Answer  = require('../models/Answer');
-const CustomError = require("../errors");
+const { CustomError } = require("../errors");
+const  { StatusCodes } = require("http-status-codes");
 
 
 
 const addAnswerToQuestion = async (req, res) => {
     const { id: questionId } = req.params;
 
-    //const user_id = req.user.id,
+    const user_id = req.user.id;
 
     const information = req.body;
 
     const answer =  await Qestion.create({
         ...information,
-         question: question_id,
-         //user: user_id
+         question: questionId,
+         user: user_id
         
     });
 
@@ -108,7 +109,7 @@ const getSingleAnswer = async (req, res) => {
       }
       answer.likes.push(req.user.id);
     
-      await question.save();
+      await answer.save();
     
       return res.status(StatusCodes.OK).json({
         message: "Liked",
@@ -126,7 +127,7 @@ const getSingleAnswer = async (req, res) => {
             throw new CustomError.BadRequestError(`You have not liked this answer`);
         }
     
-        const index = question.likes.indexOf(req.user.id);
+        const index = answer.likes.indexOf(req.user.id);
     
         answer.likes.splice(index, 1);
     
