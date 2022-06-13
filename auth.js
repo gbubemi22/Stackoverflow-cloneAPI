@@ -3,6 +3,7 @@ const {StatusCodes} = require('http-status-codes')
 const CustomError = require('../errors')
 const { attachCookiesToResponse, createTokenUser } = require('../utils');
 const sendMail = require('../utils/sendEMail');
+const bcrypt = require('bcryptjs');
 
 
 
@@ -32,13 +33,13 @@ const register = async (req , res) => {
 
 
 const login = async (req, res) => {
-    const { name, password } = req.body;
+    const { email, password } = req.body;
   
-    if (!name || !password) {
+    if (!email || !password) {
       throw new CustomError.BadRequestError('Please provide username and password');
     }
   
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ email }).select("+password");
   
     if (!user) {
       throw new CustomError.UnauthenticatedError('Invalid Credentials');
@@ -57,7 +58,7 @@ const login = async (req, res) => {
   
   const logout = async (req, res) => {
 
-    const {NODE_ENV} = process.env;
+    
     res.cookie('token', 'logout', {
       httpOnly: true,
       expires: new Date(Date.now() + 1000),
