@@ -1,35 +1,35 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const profileImageUpload = require('../utils/profileImageUpload');
+const profileImageUpload = require("../utils/profileImageUpload");
 
 const {
-    userProfile,
-    imageUpload,
-    register,
-    login,
-    logout,
-    updateUser,
-    forgotPassword,
-    resetPassword,
-    
-  } = require("../controllers/auth");
+  userProfile,
+  imageUpload,
+  register,
+  login,
+  logout,
+  updateUser,
+  forgotPassword,
+  resetPassword,
+} = require("../controllers/auth");
 
-  const {
-    authenticateUser,
-        } = require('../middleware/authentication');
+const { authenticateUser } = require("../middleware/authentication");
 
-  router.post('/register', register)
-  router.post('/login', login)
-  router.get('logout', logout)
-  router.get('/profile',authenticateUser,userProfile);
+router.post("/register", register);
+router.post("/login", login);
+router.get("logout", logout);
+router.get("/profile", authenticateUser, userProfile);
 
-  router.put('/userUpdate', updateUser)
+router.put("/userUpdate", updateUser);
 
-  router.patch('/forgetpassword', forgotPassword)
-  router.patch('/resetpassword', resetPassword)
+router.patch("/forgetpassword", forgotPassword);
+router.patch("/resetpassword", resetPassword);
 
-
-  router.post('/upload', [profileImageUpload.single("profile_image")],(authenticateUser),imageUpload)
-
+router.post(
+  "/upload",
+  [profileImageUpload.single("profile_image")],
+  authenticateUser,
+  imageUpload
+);
 
 module.exports = router;

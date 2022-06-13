@@ -4,34 +4,29 @@ const CustomError = require("../errors");
 
 /* "storage" specifies where to load the file. It contains two properties named "destination" and "filename". These properties have "req, file, callback" parameters. */
 const storage = multer.diskStorage({
-    destination: function(req, file, cb){
+  destination: function (req, file, cb) {
+    const rootDir = path.dirname(require.main.filename);
+    cb(null, path.join(rootDir, "public/uploads"));
+  },
 
-        const rootDir = path.dirname(require.main.filename);
-        cb(null, path.join(rootDir, "public/uploads"));
-    
-    },
-
-    filename: function(req, file, cb){
-
-        const extension = file.mimetype.split("/")[1];
-        req.savedProfileImage = "image_" + req.user.id + "." + extension;
-        cb(null, req.savedProfileImage);
-
-    }
+  filename: function (req, file, cb) {
+    const extension = file.mimetype.split("/")[1];
+    req.savedProfileImage = "image_" + req.user.id + "." + extension;
+    cb(null, req.savedProfileImage);
+  },
 });
 
 /* "fileFilter" specifies which types of files can be uploaded. */
 const fileFilter = (req, file, cb) => {
-    let allowedMimeTypes = ["image/jpg", "image/gif", "image/jpeg", "image/png"]
+  let allowedMimeTypes = ["image/jpg", "image/gif", "image/jpeg", "image/png"];
 
-    if(!allowedMimeTypes.includes(file.mimetype)){
-        return cb(new CustomError("Please provide a valid image file", 400), false)
-    }
-    return cb(null, true);
-
+  if (!allowedMimeTypes.includes(file.mimetype)) {
+    return cb(new CustomError("Please provide a valid image file", 400), false);
+  }
+  return cb(null, true);
 };
 
 /* These are exported thanks to the "multer({})" method. */
-const profileImageUpload = multer({storage, fileFilter});
+const profileImageUpload = multer({ storage, fileFilter });
 
 module.exports = profileImageUpload;

@@ -1,26 +1,23 @@
-const redis = require('redis');
-
-
-
+const redis = require("redis");
 
 const REDIS_PORT = process.env.REDIS_PORT || 6379;
 
- const client = redis.createClient(REDIS_PORT);
+const client = redis.createClient(REDIS_PORT);
 
- //Cache middleware
- const catchValue = (req, res, next) => {
- const { url } = req;
+//Cache middleware
+const catchValue = (req, res, next) => {
+  const { url } = req;
 
- client.get(url, (err, data) => {
+  client.get(url, (err, data) => {
     if (err) {
-    next();
+      next();
     } else {
-    res.send(data);
+      res.send(data);
     }
- })
- }
+  });
+};
 
- module.exports = catchValue;
+module.exports = catchValue;
 
 // const client = redis.createClient({
 //     host: 'localhost:7005/api/v1/',
@@ -30,8 +27,7 @@ const REDIS_PORT = process.env.REDIS_PORT || 6379;
 
 // client.on('error', err => {
 //     console.log('Error ' + err);
-// }); 
-
+// });
 
 // app.get('/api/v1/', (req, res, next) => {
 //  try {
