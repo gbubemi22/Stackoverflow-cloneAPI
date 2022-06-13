@@ -16,13 +16,12 @@ const {
 
   const {
     authenticateUser,
-    authorizePermissions
-    } = require('../middleware/authentication');
+        } = require('../middleware/authentication');
 
-  router.post('/register', register);
-  router.post('/login', login);
-  router.get('logout', logout);
-  router.get('/profile',(authenticateUser),userProfile);
+  router.post('/register', register)
+  router.post('/login', login)
+  router.get('logout', logout)
+  router.get('/profile',authenticateUser,userProfile);
 
   router.put('/userUpdate', updateUser)
 

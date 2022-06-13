@@ -6,16 +6,13 @@ const  { StatusCodes } = require("http-status-codes");
 
 
 const addAnswerToQuestion = async (req, res) => {
-    const { id: questionId } = req.params;
-
-    const user_id = req.user.id;
+     
 
     const information = req.body;
 
     const answer =  await Qestion.create({
         ...information,
-         question: questionId,
-         user: user_id
+               
         
     });
 

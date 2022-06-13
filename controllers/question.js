@@ -11,7 +11,7 @@ const AskQuestion = async (req, res) => {
     const question =  await Question.create({
         ...information,
 
-        user:req.user.id,
+        
     });
 
     res.status(StatusCodes.CREATED).json({

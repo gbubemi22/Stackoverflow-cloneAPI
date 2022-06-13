@@ -20,7 +20,7 @@ api/admin/
 This route returns a simple message. It is open to Admin access only.
 */    
 
-router.get('/', async, (req, res) => {
+router.get('/', async (req, res) => {
 
     const {admin} = req.admin.user;
     const adminUser = await User.findOne({admin})

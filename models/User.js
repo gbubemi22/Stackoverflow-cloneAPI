@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const Question = require('./Question');
 const validator = require('validator');
 
@@ -10,20 +10,14 @@ const UserSchema = new mongoose.Schema({
 
     name: {
         type: String,
-        required: [true, 'Please provide name'],
-        minlength: 3,
-        maxlength: 50,
-    },
+        },
 
     email: {
         type: String,
-        required: [true, 'Please provide email'],
-        unique: true,
-        validate: {
-        validator: validator.isEmail,
-         message: 'Please provide valid email',
+        
+        
     },
-},
+
 
     role: {
         type: String,
@@ -34,7 +28,7 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         select: false,
-        required: [true, 'Please provide password'],
+        
     },
     profile_image: {
         type: String,
@@ -62,24 +56,6 @@ UserSchema.pre('save', async function () {
     const isMatch = await bcrypt.compare(canditatePassword, this.password);
     return isMatch;
   };
-
-
-
-    /* After the user is deleted, it also deletes the user's questions. */
-    UserSchema.post("remove", async function(){
-        await Question.deleteMany({
-          user: this._id
-        }) 
-    });
-
-    /* After the user is deleted, it also deletes the user's questions. */
-UserSchema.post("remove", async function(){
-    await Question.deleteMany({
-      user: this._id
-    }) 
-});
-
-
 
 
 const User = mongoose.model("user", UserSchema);
